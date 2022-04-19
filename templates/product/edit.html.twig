@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="edit">
+        <input type="text" name="name" placeholder="CPU name" value="{{ product.name }}">
+        <input type="number" name="price" placeholder="price" value="{{ product.price }}">
+        <fieldset>
+            <legend>Team</legend>
+            <input type="radio" name="team" value="AMD"
+                {{ (product.team == "AMD") ? 'checked="checked"' : "" }}
+            >
+            <label for="team">AMD</label>
+            <input type="radio" name="team" value="Intel"
+                {{ (product.team == "Intel") ? 'checked="checked"' : "" }}
+            >
+            <label for="team">Intel</label>
+        </fieldset>
+        <input type="text" name="platform" placeholder="Platform" value="{{ product.platform }}">
+        <button type="submit">Add</button>
+    </form>
+    {{ dump(product) }}
+</body>
+</html>
