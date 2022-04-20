@@ -1,54 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <title>All products</title>
-    <style>
-        a {
-            color: white;
-            font-style: italic;
-        }
-    </style>
-</head>
-<body class="bg-warning bg-gradient">
+{% extends "base.html.twig" %}
+
+{% block title %}Products{% endblock %}
+
+{% block body %}
     <div class="container mt-5">
-        <select class="form-select w-25 d-inline" name="filter">
-            <option value="">Ascening</option>
-            <option value="">Descending</option>
-            <option value="">Price range</option>
-            <option value="">Neki wild filter</option>
+        <select class="form-select w-25 d-inline" name="filter" id="filter">
+            <option value="price_asc">Ascening</option>
+            <option value="price_dsc">Descending</option>
+            <option value="price_range">Price range</option>
+            <option value="wild_wild_west">Neki wild filter</option>
         </select>
         <button class="btn btn-dark"><a href="add">Add</a></button>
-            {% if products | length %}
-                <table class="table table-dark table-hover text-center mt-1 shadow rounded overflow-hidden">
+        {% if products | length %}
+            <table class="table table-dark table-hover text-center mt-1 shadow rounded overflow-hidden">
+            <thead>
+                <tr>
+                    <th>ID<th>
+                    <th>Name<th>
+                    <th>Price<th>
+                    <th>Team<th>
+                    <th>Platform<th>
+                    <th>Slug<th>
+                    <th colspan="2">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
                     <tr>
-                        <td>ID<td>
-                        <td>Name<td>
-                        <td>Price<td>
-                        <td>Team<td>
-                        <td>Platform<td>
-                        <td>Slug<td>
-                        <td colspan="2">Options</td>
+                        <td>{{ product.id }}<td>
+                        <td>{{ product.name }}<td>
+                        <td>{{ product.price }}<td>
+                        <td>{{ product.team }}<td>
+                        <td>{{ product.platform }}<td>
+                        <td>{{ product.slug }}<td>
+                        <td><a href="edit/{{ product.id }}">Edit</a></td>
+                        <td><a href="delete/{{ product.id }}">Delete</a></td>
                     </tr>
-                    {% for product in products %}
-                        <tr>
-                            <td>{{ product.id }}<td>
-                            <td>{{ product.name }}<td>
-                            <td>{{ product.price }}<td>
-                            <td>{{ product.team }}<td>
-                            <td>{{ product.platform }}<td>
-                            <td>{{ product.slug }}<td>
-                            <td><a href="edit/{{ product.id }}">Edit</a></td>
-                            <td><a href="delete/{{ product.id }}">Delete</a></td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            {% else %}
-                <h4 class="text-center">No products!</h4>
-            {% endif %}
-        </div>
-</body>
-</html>
+                {% endfor %}
+            </tbody>
+            </table>
+        {% else %}
+            <h4 class="text-center">No products!</h4>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block script %}
+    let filter = document.getElementById("filter");
+
+    filter.addEventListener("change", function() {
+        let value
+        $.get(" {{ path("product-filter") }} ", {})
+    })
+{% endblock %}

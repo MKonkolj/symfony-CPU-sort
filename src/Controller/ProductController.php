@@ -63,4 +63,10 @@ class ProductController extends AbstractController
 
         return new Response("Successfully deleted product with id: " . $id . "!");
     }
+
+    #[Route("/filter", name: "filter")]
+    public function filter()
+    {
+
+    }
 }
