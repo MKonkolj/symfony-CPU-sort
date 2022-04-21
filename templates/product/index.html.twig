@@ -10,7 +10,8 @@
             <option value="price_range">Price range</option>
             <option value="wild_wild_west">Neki wild filter</option>
         </select>
-        <button class="btn btn-dark"><a href="add">Add</a></button>
+        <button class="btn btn-dark"><a href="{{ path("product-add") }}">Add</a></button>
+        {{ dump(products) }}
         {% if products | length %}
             <table class="table table-dark table-hover text-center mt-1 shadow rounded overflow-hidden">
             <thead>
@@ -33,8 +34,8 @@
                         <td>{{ product.team }}<td>
                         <td>{{ product.platform }}<td>
                         <td>{{ product.slug }}<td>
-                        <td><a href="edit/{{ product.id }}">Edit</a></td>
-                        <td><a href="delete/{{ product.id }}">Delete</a></td>
+                        <td><a href="{{ path("product-edit", {'id':product.getId()}) }}">Edit</a></td>
+                        <td><a href="{{ path("product-delete", {'id':product.getId()}) }}">Delete</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -46,10 +47,10 @@
 {% endblock %}
 
 {% block script %}
-    let filter = document.getElementById("filter");
+    {# let filter = document.getElementById("filter");
 
     filter.addEventListener("change", function() {
         let value
         $.get(" {{ path("product-filter") }} ", {})
-    })
+    }) #}
 {% endblock %}

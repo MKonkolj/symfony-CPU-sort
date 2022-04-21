@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -14,34 +15,49 @@ class ProductController extends AbstractController
     #[Route('/all', name: 'all')]
     public function all(ProductRepository $product_repository): Response
     {
-        $products = $product_repository->findAll();
-
-        return $this->render('product/index.html.twig', ['products' => $products]);
+        return $this->render('product/index.html.twig', ['products' => $product_repository->findAll()]);
     }
     
-    #[Route('/add', name: 'add')]
-    public function add()
+    #[Route('/add', name: 'add', methods: ["GET", "POST"])]
+    public function add(ProductRepository $product_repository, Request $request) : Response
     {
+        if(isset($_POST["add-submit"]))
+        {
+            $product = new Product;
+            $product->setName($request->request->get("name"));
+            $product->setPrice($request->request->get("price"));
+            $product->setTeam($request->request->get("team"));
+            $product->setPlatform($request->request->get("platform"));
+
+            $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->request->get("name")), '-'));
+            $product->setSlug($slug);
+            $product_repository->add($product);
+
+            return $this->redirectToRoute("product-all");
+        }
+
         return $this->render('product/add.html.twig');
     }
 
-    #[Route('/add-submit', name: 'add-submit')]
-    public function addSubmit(ProductRepository $product_repository)
+    #[Route('/edit/{id}', name: 'edit', methods: ["GET", "POST"])]
+    public function edit(Request $request, ProductRepository $product_repository, string $id): Response
     {
-        // $product = new Product();
-        // $product->setName();
-        // $product->setPrice();
-        // $product->setSlug();
-
-        // $product_repository->add($product);
-
-        // return new Response("Successfully saved new product with id: " . $product->getId());
-        return new Response("Successfully saved new product");
-    }
-
-    #[Route('/edit/{id}', name: 'edit')]
-    public function one_product(ProductRepository $product_repository, int $id): Response
-    {
+        
+        if(isset($_POST["edit-submit"]))
+        {
+            $product = new Product;
+            $product->setName($request->request->get("name"));
+            $product->setPrice($request->request->get("price"));
+            $product->setTeam($request->request->get("team"));
+            $product->setPlatform($request->request->get("platform"));
+            
+            $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->request->get("name")), '-'));
+            $product->setSlug($slug);
+            $product_repository->add($product);
+            
+            return $this->redirectToRoute("product-all");
+        }
+        
         $product = $product_repository->findOneBy(['id' => $id]);
 
         if($product == null)
@@ -52,7 +68,7 @@ class ProductController extends AbstractController
 
 
     #[Route('/delete/{id}', name: 'delete')]
-    public function delete($id, ProductRepository $product_repository)
+    public function delete($id, ProductRepository $product_repository) : Response
     {
         $product = $product_repository->find($id);
 
@@ -61,12 +77,6 @@ class ProductController extends AbstractController
 
         $product_repository->remove($product);
 
-        return new Response("Successfully deleted product with id: " . $id . "!");
-    }
-
-    #[Route("/filter", name: "filter")]
-    public function filter()
-    {
-
+        return $this->redirectToRoute("product-all");
     }
 }

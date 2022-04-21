@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="container w-25 mt-5">
-        <form class="d-flex flex-column gap-3" action="edit">
+        <form class="d-flex flex-column gap-3" action="edit" method="POST">
             <input type="text" name="name" placeholder="CPU name" value="{{ product.name }}">
             <input type="number" name="price" placeholder="price" value="{{ product.price }}">
             <fieldset>
@@ -19,7 +19,7 @@
                 <label for="team">Intel</label>
             </fieldset>
             <input type="text" name="platform" placeholder="Platform" value="{{ product.platform }}">
-            <button class="btn btn-dark" type="submit">Edit</button>
+            <button class="btn btn-dark" type="submit" name="edit-submit">Edit</button>
         </form>
     {{ dump(product) }}
     </div>
