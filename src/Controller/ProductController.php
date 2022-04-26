@@ -42,10 +42,12 @@ class ProductController extends AbstractController
     #[Route('/edit/{id}', name: 'edit', methods: ["GET", "POST"])]
     public function edit(Request $request, ProductRepository $product_repository, string $id): Response
     {
+        $product = $product_repository->findOneBy(['id' => $id]);
         
-        if(isset($_POST["edit-submit"]))
+        if($request->request->get("edit-submit") !== null)
+        // if(isset($_POST["edit-submit"]))
         {
-            $product = new Product;
+            
             $product->setName($request->request->get("name"));
             $product->setPrice($request->request->get("price"));
             $product->setTeam($request->request->get("team"));
@@ -58,7 +60,6 @@ class ProductController extends AbstractController
             return $this->redirectToRoute("product-all");
         }
         
-        $product = $product_repository->findOneBy(['id' => $id]);
 
         if($product == null)
             throw $this->createNotFoundException('Product not found.');
