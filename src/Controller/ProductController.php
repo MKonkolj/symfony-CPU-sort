@@ -45,7 +45,6 @@ class ProductController extends AbstractController
         $product = $product_repository->findOneBy(['id' => $id]);
         
         if($request->request->get("edit-submit") !== null)
-        // if(isset($_POST["edit-submit"]))
         {
             
             $product->setName($request->request->get("name"));
@@ -79,5 +78,15 @@ class ProductController extends AbstractController
         $product_repository->remove($product);
 
         return $this->redirectToRoute("product-all");
+    }
+
+    #[Route('/sort', name: 'sort', methods: ["GET"])]
+    public function sort(Request $request, ProductRepository $product_repository)
+    {
+        $sort_type = $request->query->get('sort_type');
+
+        $products = $product_repository->sort($sort_type);
+
+        return $this->json($products);
     }
 }

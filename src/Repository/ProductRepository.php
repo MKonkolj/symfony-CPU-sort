@@ -45,6 +45,33 @@ class ProductRepository extends ServiceEntityRepository
         }
     }
 
+    public function sort($sort_type)
+    {
+        if($sort_type == "price_asc")
+        {
+            return $this->createQueryBuilder('p')
+                ->orderBy('p.price', 'ASC')
+                ->getQuery()
+                ->getResult();
+        }
+
+        if($sort_type == "price_dsc")
+        {
+            return $this->createQueryBuilder('p')
+                    ->orderBy('p.price', 'DESC')
+                    ->getQuery()
+                    ->getResult();
+        }
+
+        if($sort_type == "newest")
+        {
+            return $this->createQueryBuilder('p')
+                    ->orderBy('p.id', 'DESC')
+                    ->getQuery()
+                    ->getResult();
+        }
+    }
+
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */
