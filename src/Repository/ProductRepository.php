@@ -70,6 +70,33 @@ class ProductRepository extends ServiceEntityRepository
                     ->getQuery()
                     ->getResult();
         }
+
+        if($sort_type == "bla")
+        {
+
+
+            $qb = $this->createQueryBuilder("p");
+
+            $qb
+                ->where( 
+                    $qb->expr()->orX(
+                        $qb->expr()->andX(
+                            $qb->expr()->like("p.team", ":team1"),
+                            $qb->expr()->max("p.price")
+                        ),
+                        $qb->expr()->andX(
+                            $qb->expr()->like("p.team", ":team2"),
+                            $qb->expr()->max("p.price")
+                        )
+                    )
+                )
+                ->setParameter("team1", "AMD")
+                ->setParameter("team2", "Intel");
+
+            dump($qb->getQuery()->getResult());
+
+            return $qb->getQuery()->getResult();
+        }
     }
 
     // /**
