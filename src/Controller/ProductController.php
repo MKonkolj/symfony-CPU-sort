@@ -21,7 +21,7 @@ class ProductController extends AbstractController
     #[Route('/add', name: 'add', methods: ["GET", "POST"])]
     public function add(ProductRepository $product_repository, Request $request) : Response
     {
-        if(isset($_POST["add-submit"]))
+        if($request->request->get("add-submit") !== null)
         {
             $product = new Product;
             $product->setName($request->request->get("name"));
