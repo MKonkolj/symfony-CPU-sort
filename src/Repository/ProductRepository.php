@@ -71,27 +71,28 @@ class ProductRepository extends ServiceEntityRepository
                     ->getResult();
         }
 
+        // Ovo je zamišljeno da bude query koji će vratiti proizvod sa najvećom cenom odvojeno za AMD i Intel
+        // ne radi jer max na radi tako kako meni treba ovde
         if($sort_type == "bla")
         {
 
-
             $qb = $this->createQueryBuilder("p");
 
-            $qb
-                ->where( 
-                    $qb->expr()->orX(
-                        $qb->expr()->andX(
-                            $qb->expr()->like("p.team", ":team1")
-                        ),
-                        $qb->expr()->andX(
-                            $qb->expr()->like("p.team", ":team2")
-                        )
-                    )
-                )
-                ->setParameter("team1", "AMD")
-                ->setParameter("team2", "Intel");
-
-            dump($qb->getQuery()->getResult());
+            // $qb
+            //     ->where( 
+            //         $qb->expr()->orX(
+            //             $qb->expr()->andX(
+            //                 $qb->expr()->like("p.team", ":team1"),
+            //                 $qb->expr()->max("p.price")
+            //             ),
+            //             $qb->expr()->andX(
+            //                 $qb->expr()->like("p.team", ":team2"),
+            //                 $qb->expr()->max("p.price")
+            //             )
+            //         )
+            //     )
+            //     ->setParameter("team1", "AMD")
+            //     ->setParameter("team2", "Intel");
 
             return $qb->getQuery()->getResult();
         }
